@@ -1,0 +1,34 @@
+
+<div class="container">
+    <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">All Schedules</h3>
+    <div class="container">
+        <table class="table" >
+            <thead class="thead-dark">
+                <tr>
+                    <th>Schedule Id</th>
+                    <th>Source Airport</th>
+                    <th>Destination Airport</th>
+                    <th>Arrival Time</th>
+                    <th>Departure Time</th>
+                    <th>Action</th>
+                </tr>
+        
+            </thead>
+            <tbody *ngFor="let schedule of schedules">
+                <tr>
+                    <th>{{schedule.scheduleId}}</th>
+                    <td>{{schedule.sourceAirport.airportName}}</td>
+                    <td>{{schedule.destinationAirport.airportName}}</td>
+                    <td>{{schedule.arrivalTime}}</td>
+                    <td>{{schedule.departureTime}}</td>
+                    <td>
+                        <tr>
+                            <td><button class="btn btn-info" (click)="updateSchedule(schedule.scheduleId)">Update</button></td>
+                            <td><button class="btn btn-danger" (click)="deleteSchedule(schedule.scheduleId)">Delete</button></td>
+                        </tr>
+                    </td>
+                 </tr>
+            </tbody>
+        </table>
+    </div>  
+</div>

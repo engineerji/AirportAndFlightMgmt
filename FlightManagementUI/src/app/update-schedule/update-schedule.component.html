@@ -1,0 +1,64 @@
+<div class="container">
+    <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Update Schedule</h3>
+    <form #scheduleForm="ngForm" (ngSubmit)="updateSchedule(scheduleForm)">
+        <div class="form-group">
+            <label>Schedule Id</label>
+            <input type="text" #scheduleId="ngModel" class="form-control" disabled name="scheduleId" [(ngModel)]="schedule.scheduleId">
+        </div>
+        <div class="form-group">
+            <label class="form-group-label">Source Airport</label>
+            <select class="custom-select" (change)="validateAirport(destinationAirport.value , sourceAirport.value)" #sourceAirport="ngModel" name="sourceAirport" required [(ngModel)]="schedule.sourceAirport">
+                <option selected value="schedule.sourceAirport.airportCode">{{schedule.sourceAirport.airportName}}</option>
+                <option *ngFor="let airport of airportList" value="{{airport.airportCode}}">{{airport.airportName}}</option>
+            </select>
+            <div *ngIf="sourceAirport.invalid && (sourceAirport.dirty || sourceAirport.touched)" class="alert alert-danger">
+                <small *ngIf="sourceAirport.errors.required">
+                   Please choose the Airport.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group-label">Destination Airport</label>
+            <select class="custom-select" (change)="validateAirport(destinationAirport.value , sourceAirport.value)" #destinationAirport="ngModel" name="destinationAirport" required [(ngModel)]="schedule.destinationAirport">
+                <option selected value="schedule.destinationAirport.airportCode">{{schedule.destinationAirport.airportName}}</option>
+                <option *ngFor="let airport of airportList" value="{{airport.airportCode}}">{{airport.airportName}}</option>
+            </select>
+            <div *ngIf="destinationAirport.invalid && (destinationAirport.dirty || destinationAirport.touched)" class="alert alert-danger">
+                <small *ngIf="destinationAirport.errors.required">
+                   Please choose the Airport.
+                </small>
+            </div>
+            <div *ngIf="hasError" class="alert alert-danger">
+                <small *ngIf="hasError">
+                    Source Airport and Destination Airport should not be same.
+                </small>
+            </div>
+            
+            
+        </div>
+        <div class="form-group">
+            <label>Arrival Time</label>
+            <input type="datetime-local" (change)="validateDate(arrivalTime.value,departureTime.value)" #arrivalTime="ngModel" class="form-control" name="arrivalTime" required [(ngModel)]="schedule.arrivalTime">
+        </div>
+        <div *ngIf="arrivalTime.invalid && (arrivalTime.dirty || arrivalTime.touched)" class="alert alert-danger">
+            <small *ngIf="arrivalTime.errors.required">
+                Arrival Time is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label>Departure Time</label>
+            <input type="datetime-local" (change)="validateDate(arrivalTime.value,departureTime.value)" #departureTime="ngModel" class="form-control" name="departureTime" required [(ngModel)]="schedule.departureTime">
+        </div>
+        <div *ngIf="departureTime.invalid && (departureTime.dirty || departureTime.touched)" class="alert alert-danger">
+            <small *ngIf="departureTime.errors.required">
+                Departure Time is required.
+            </small>
+        </div>
+        <div *ngIf="departureTime.touched && dateError" class="alert alert-danger">
+            <small >
+                Departure Time should be greater than Arrival Time.
+            </small>
+        </div>
+       <button [disabled]="scheduleForm.form.invalid || hasError || dateError" class="btn btn-primary" type="submit">Update</button>
+    </form>
+</div>

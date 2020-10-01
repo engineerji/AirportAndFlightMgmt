@@ -1,0 +1,48 @@
+<div class="container">
+    <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Add Airport</h3>
+    <form #airportForm="ngForm" (ngSubmit)="addAirport()">
+        <div class="form-group">
+            <label>Airport Code</label>
+            <input type="text" #airportCode="ngModel" class="form-control" pattern="(?=.*[A-Z]){2,}(?=.*\d).{3,}" name="airportCode" placeholder="Enter the Airport Code" required maxlength="10" [(ngModel)]="airportModel.airportCode">
+        </div>
+        <div *ngIf="airportCode.invalid && (airportCode.dirty || airportCode.touched)" class="alert alert-danger">
+            <div *ngIf="airportCode.errors.required">
+                Airport Code is required.
+            </div>
+
+            <div *ngIf="airportCode.errors.pattern">
+                Airport Code should be like ABC123.
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Airport Name</label>
+            <input type="text" #airportName="ngModel" class="form-control" pattern="(?=.*[A-Z])(?=.*[a-z]).{3,}" name="airportName" placeholder="Enter the Airport Name" required [(ngModel)]="airportModel.airportName">
+        </div>
+        <div *ngIf="airportName.invalid && (airportName.dirty || airportName.touched)" class="alert alert-danger">
+            <div *ngIf="airportName.errors.required">
+                Airport Name is required.
+            </div>
+
+            <div *ngIf="airportName.errors.pattern">
+                Airport Name should be like Abc Cde.
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Airport Location</label>
+            <input type="text" #airportLocation="ngModel" class="form-control" pattern="(?=.*[A-Z])(?=.*[a-z]).{3,}" name="airportLocation" placeholder="Enter the Airport Location" required  [(ngModel)]="airportModel.airportLocation">
+        </div>
+        <div *ngIf="airportLocation.invalid && (airportLocation.dirty || airportLocation.touched)" class="alert alert-danger">
+            <div *ngIf="airportLocation.errors.required">
+                Airport Location is required.
+            </div>
+
+            <div *ngIf="airportLocation.errors.pattern">
+                Airport Location should be like New Delhi.
+            </div>
+        </div>
+       <button [disabled]="airportForm.form.invalid" class="btn btn-primary" type="submit">Add</button>
+    </form>
+</div>
+<div class="container" *ngIf="show">
+    <small style="color: green;">{{airportResponse.airportName}} Added Successfully!</small>
+</div>

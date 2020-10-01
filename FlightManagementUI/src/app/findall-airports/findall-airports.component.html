@@ -1,0 +1,30 @@
+
+<div class="container">
+    <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">All Airport Details</h3>
+    <div class="container">
+        <table class="table" >
+            <thead class="thead-dark">
+                <tr>
+                    <th>Airport Code</th>
+                    <th>Airport Name</th>
+                    <th>Airport Location</th>
+                    <th>Action</th>
+                </tr>
+        
+            </thead>
+            <tbody *ngFor="let airport of airports">
+                <tr>
+                    <th>{{airport.airportCode}}</th>
+                    <td>{{airport.airportName}}</td>
+                    <td>{{airport.airportLocation}}</td>
+                    <td>
+                        <tr>
+                            <td><button class="btn btn-info" (click)="updateAirport(airport.airportCode)" >Update</button></td>
+                            <td><button class="btn btn-danger" (click)="deleteAirport(airport.airportCode)">Delete</button></td>
+                        </tr>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>  
+</div>

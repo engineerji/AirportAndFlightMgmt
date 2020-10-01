@@ -1,0 +1,43 @@
+<div class="container">
+    <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Find Airport</h3>
+    <form #searchAirportForm="ngForm" (ngSubmit)="getAirport()">
+        <div class="form-group">
+            <label>Airport Code</label>
+            <input type="text" #airportCode="ngModel" class="form-control" pattern="(?=.*[A-Z]){2,}(?=.*\d).{3,}" name="airportCode" placeholder="Enter the Airport Code" required maxlength="10" [(ngModel)]="searchAirportCode">
+        </div>
+        <div *ngIf="airportCode.invalid && (airportCode.dirty || airportCode.touched)" class="alert alert-danger">
+            <div *ngIf="airportCode.errors.required">
+                Airport Code is required.
+            </div>
+
+            <div *ngIf="airportCode.errors.pattern">
+                Airport Code should be like ABC123.
+            </div>
+        </div>
+       <button [disabled]="searchAirportForm.form.invalid" class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
+<div class="container" *ngIf="show">
+    <h2 style="margin-left: 40%;"> Airport Details</h2>
+    <table class="table">
+        <tr>
+            <th >Airport Code</th><td>{{airport.airportCode}}</td>
+        </tr>
+        <tr>
+            <th >Airport Name</th><td>{{airport.airportName}}</td>
+        </tr>
+        <tr>
+            <th >Airport Location</th><td>{{airport.airportLocation}}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td><tr>
+                <td><button class="btn btn-info" (click)="updateAirport(airport.airportCode)">Update</button></td>
+                <td><button class="btn btn-danger" (click)="deleteAirport()">Delete</button></td>
+            </tr></td>
+        </tr>
+    </table>
+</div>
+<div class="container" *ngIf="errorShow">
+    <small style="color: red;">Invalid Airport Code</small>
+</div>

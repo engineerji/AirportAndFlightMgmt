@@ -1,0 +1,79 @@
+<div class="container">
+    <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Add Schedule</h3>
+    <form #scheduleForm="ngForm" (ngSubmit)="addSchedule(scheduleForm)">
+        <div class="form-group">
+            <label>Schedule Id</label>
+            <input type="text" #scheduleId="ngModel" class="form-control" pattern="(?=.*[A-Z]){2,}(?=.*\d).{3,}" name="scheduleId" placeholder="Enter the Schedule Id" required maxlength="10" [(ngModel)]="scheduleModel.scheduleId">
+        </div>
+        <div *ngIf="scheduleId.invalid && (scheduleId.dirty || scheduleId.touched)" class="alert alert-danger">
+            <small *ngIf="scheduleId.errors.required">
+                Schedule Id is required.
+            </small>
+
+            <small *ngIf="scheduleId.errors.pattern">
+                Schedule Id should be like ABC123.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-group-label">Source Airport</label>
+            <select class="custom-select" (change)="validateAirport(destinationAirport.value , sourceAirport.value)" #sourceAirport="ngModel" name="sourceAirport" required [(ngModel)]="scheduleModel.sourceAirport">
+                <option selected value="null">Choose Airport</option>
+                <option *ngFor="let airport of airportList" value="{{airport.airportCode}}">{{airport.airportName}}</option>
+            </select>
+            <div *ngIf="sourceAirport.invalid && (sourceAirport.dirty || sourceAirport.touched)" class="alert alert-danger">
+                <small *ngIf="sourceAirport.errors.required">
+                   Please choose the Airport.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group-label">Destination Airport</label>
+            <select class="custom-select" (change)="validateAirport(destinationAirport.value , sourceAirport.value)" #destinationAirport="ngModel" name="destinationAirport" required [(ngModel)]="scheduleModel.destinationAirport">
+                <option selected value="null">Choose Airport</option>
+                <option *ngFor="let airport of airportList" value="{{airport.airportCode}}">{{airport.airportName}}</option>
+            </select>
+            <div *ngIf="destinationAirport.invalid && (destinationAirport.dirty || destinationAirport.touched)" class="alert alert-danger">
+                <small *ngIf="destinationAirport.errors.required">
+                   Please choose the Airport.
+                </small>
+            </div>
+            <div *ngIf="hasError" class="alert alert-danger">
+                <small *ngIf="hasError">
+                    Source Airport and Destination Airport should not be same.
+                </small>
+            </div>
+            
+            
+        </div>
+        <div class="form-group">
+            <label>Arrival Time</label>
+            <input type="datetime-local" (change)="validateDate(arrivalTime.value,departureTime.value)" #arrivalTime="ngModel" min="date" class="form-control" name="arrivalTime" required [(ngModel)]="scheduleModel.arrivalTime">
+        </div>
+        <div *ngIf="arrivalTime.invalid && (arrivalTime.dirty || arrivalTime.touched)" class="alert alert-danger">
+            <small *ngIf="arrivalTime.errors.required">
+                Arrival Time is required.
+            </small>
+            <small *ngIf="arrivalTime.errors.min">
+                Arrival Time is invalid.
+            </small>
+        </div>
+        <div class="form-group">
+            <label>Departure Time</label>
+            <input type="datetime-local" (change)="validateDate(arrivalTime.value,departureTime.value)" #departureTime="ngModel" class="form-control" name="departureTime" required [(ngModel)]="scheduleModel.departureTime">
+        </div>
+        <div *ngIf="departureTime.invalid && (departureTime.dirty || departureTime.touched)" class="alert alert-danger">
+            <small *ngIf="departureTime.errors.required">
+                Departure Time is required.
+            </small>
+        </div>
+        <div *ngIf="departureTime.touched && dateError" class="alert alert-danger">
+            <small >
+                Departure Time should be greater than Arrival Time.
+            </small>
+        </div>
+       <button [disabled]="scheduleForm.form.invalid || hasError || dateError" class="btn btn-primary" type="submit">Add</button>
+    </form>
+</div>
+<div class="container" *ngIf="show">
+    <small style="color: green;"> Schedule is Added Successfully!</small>
+</div>

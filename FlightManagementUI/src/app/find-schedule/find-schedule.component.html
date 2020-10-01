@@ -1,0 +1,49 @@
+<div class="container">
+    <h3 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Find Schedule</h3>
+    <form #searchScheduleForm="ngForm" (ngSubmit)="getSchedule()">
+        <div class="form-group">
+            <label>Schedule Id</label>
+            <input type="text" #scheduleId="ngModel" class="form-control" pattern="(?=.*[A-Z]){1,}(?=.*\d).{3,}" name="scheduleId" placeholder="Enter the Schedule Id" required maxlength="10" [(ngModel)]="searchScheduleId">
+        </div>
+        <div *ngIf="scheduleId.invalid && (scheduleId.dirty || scheduleId.touched)" class="alert alert-danger">
+            <div *ngIf="scheduleId.errors.required">
+                Schedule Id is required.
+            </div>
+
+            <div *ngIf="scheduleId.errors.pattern">
+                Schedule Id should be like ABC123.
+            </div>
+        </div>
+       <button [disabled]="searchScheduleForm.form.invalid" class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
+<div class="container" *ngIf="show">
+    <h2 style="margin-left: 40%;"> Schedule Details</h2>
+    <table class="table">
+        <tr>
+            <th >Schedule Id</th><td>{{schedule.scheduleId}}</td>
+        </tr>
+        <tr>
+            <th >Source Airport</th><td>{{schedule.sourceAirport.airportName}}</td>
+        </tr>
+        <tr>
+            <th >Destination Airport</th><td>{{schedule.destinationAirport.airportName}}</td>
+        </tr>
+        <tr>
+            <th >Arrival Time</th><td>{{schedule.arrivalTime}}</td>
+        </tr>
+        <tr>
+            <th >Departure Time</th><td>{{schedule.departureTime}}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td><tr>
+                <td><button class="btn btn-info" (click)="updateSchedule(schedule.scheduleId)">Update</button></td>
+                <td><button class="btn btn-danger" (click)="deleteSchedule()">Delete</button></td>
+            </tr></td>
+        </tr>
+    </table>
+</div>
+<div class="container" *ngIf="errorShow">
+    <small style="color: red;">Invalid Schedule Id</small>
+</div>
