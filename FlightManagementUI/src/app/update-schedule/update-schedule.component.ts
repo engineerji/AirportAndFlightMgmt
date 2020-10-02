@@ -40,12 +40,9 @@ export class UpdateScheduleComponent implements OnInit {
     });
   }
 
-  updateSchedule(scheduleForm : any){
-    let scheduleDetails = scheduleForm.value;
-    let code1 = scheduleDetails.sourceAirport;
-    let code2 = scheduleDetails.destinationAirport;
-    let a1 = this.findAirport(code1);
-    let a2 = this.findAirport(code2);
+  updateSchedule(){
+    let a1 = this.findAirport(this.schedule.sourceAirport.airportCode);
+    let a2 = this.findAirport(this.schedule.destinationAirport.airportCode);
     let updatedSchedule = new Schedule(this.schedule.scheduleId,a1,a2,this.schedule.arrivalTime,this.schedule.departureTime);
     let response : Observable<Schedule> = this.scheduleService.updateSchedule(updatedSchedule);
     response.subscribe((resp : Schedule) =>{    

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Airport } from '../model/airport';
 import { AirportModel } from '../model/airportModel';
@@ -12,12 +13,9 @@ import { AirportServiceService } from '../services/airport-service.service';
 export class AddAirportComponent implements OnInit {
 
   airportModel : AirportModel = new AirportModel("","","");
-  airportService : AirportServiceService;
   airportResponse : Airport = null;
   show : boolean = false;
-  constructor(airportService : AirportServiceService) {
-    this.airportService = airportService;
-   }
+  constructor(private airportService : AirportServiceService, private router : Router) { }
 
   ngOnInit(): void {
   }
@@ -26,6 +24,7 @@ export class AddAirportComponent implements OnInit {
     let response : Observable<Airport> = this.airportService.addAirport(this.airportModel);
     response.subscribe((airportResponse : Airport) =>{
       this.airportResponse = airportResponse;
+      alert(this.airportResponse.airportCode + " Added Successfully!");
     },
     error =>{
       console.log("Error "+error);
@@ -33,5 +32,6 @@ export class AddAirportComponent implements OnInit {
     });
     this.airportModel = new AirportModel("","","");
     this.show = true;
+    this.router.navigate(['']);
   }
 }

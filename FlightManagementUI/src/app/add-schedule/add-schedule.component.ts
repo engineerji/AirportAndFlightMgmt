@@ -1,4 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Airport } from '../model/airport';
 import { AirportModel } from '../model/airportModel';
@@ -14,20 +16,15 @@ import { ScheduleserviceService } from '../services/scheduleservice.service';
 })
 export class AddScheduleComponent implements OnInit {
 
-  scheduleModel : ScheduleModel = new ScheduleModel("",null,null,null,null);
+  scheduleModel : ScheduleModel = new ScheduleModel("",new Airport("","",""),new Airport("","",""),null,null);
   scheduleResponse : Schedule = null;
   show : boolean = false;
   airportList : Airport[] = null;
-  msg : string =null;
   hasError : boolean = false;
   dateError : boolean = false;
   todayDate : Date;
-  scheduleService : ScheduleserviceService;
-  airportService : AirportServiceService;
-  constructor(scheduleService : ScheduleserviceService, airportService : AirportServiceService) {
-    this.scheduleService = scheduleService;
-    this.airportService = airportService;
-   }
+  constructor(private scheduleService : ScheduleserviceService, private airportService : AirportServiceService,
+    private router : Router) { }
 
   ngOnInit(): void {
     let resp : Observable<Airport[]> = this.airportService.getAllAirports();
@@ -41,12 +38,9 @@ export class AddScheduleComponent implements OnInit {
     this.todayDate = new Date();
   }
 
-  addSchedule(scheduleForm : any){
-    let scheduleDetails = scheduleForm.value;
-    let code1 = scheduleDetails.sourceAirport;
-    let code2 = scheduleDetails.destinationAirport;
-    let a1 = this.findAirport(code1);
-    let a2 = this.findAirport(code2);
+  addSchedule(){
+    let a1 = this.findAirport(this.scheduleModel.sourceAirport.airportCode);
+    let a2 = this.findAirport(this.scheduleModel.destinationAirport.airportCode);
     let schedule = new Schedule(this.scheduleModel.scheduleId,a1,a2,this.scheduleModel.arrivalTime,this.scheduleModel.departureTime);
     let response : Observable<Schedule> = this.scheduleService.addSchedule(schedule);
     response.subscribe((scheduleResponse : Schedule) =>{
@@ -57,8 +51,9 @@ export class AddScheduleComponent implements OnInit {
       alert(error);
       console.log("Error "+error);
     });
-    this.scheduleModel = new ScheduleModel("",null,null,null,null);
+    this.scheduleModel = new ScheduleModel("",new Airport("","",""),new Airport("","",""),null,null);
     this.show = true;
+    this.router.navigate(['']);
   }
   
   findAirport(code : string):Airport{
@@ -78,7 +73,8 @@ export class AddScheduleComponent implements OnInit {
     }
   }
   validateDate(arrivalTime : Date, departureTime : Date){
-    if(departureTime <= arrivalTime){
+    this.todayDate = new Date();
+    if(departureTime <= arrivalTime || this.todayDate>= arrivalTime){
       this.dateError = true;
     }
     else{
